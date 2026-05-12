@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0065)file:///C:/Users/Oscar%20Rojas/Downloads/csat-dashboard-v2_3.html -->
+<!-- saved from url=(0065)file:///C:/Users/Oscar%20Rojas/Downloads/csat-dashboard-v2_4.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -472,7 +472,7 @@ function renderTickets() {
   document.getElementById('s-neu-count').textContent=neu+' responses';
   document.getElementById('s-neg-count').textContent=neg+' responses';
 
-  const monthLabels = {{'all':'All Time','2026-02':'February 2026','2026-03':'March 2026','2026-04':'April 2026','2026-05':'May 2026'}};
+  const monthLabels = {'all':'All Time','2026-02':'February 2026','2026-03':'March 2026','2026-04':'April 2026','2026-05':'May 2026'};
   document.getElementById('csat-period-tag').textContent = monthLabels[currentMonth]||currentMonth;
 
   const filtered = getFilteredTickets();
