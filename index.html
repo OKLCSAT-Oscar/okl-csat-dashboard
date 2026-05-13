@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0065)file:///C:/Users/Oscar%20Rojas/Downloads/csat-dashboard-v2_4.html -->
+<!-- saved from url=(0065)file:///C:/Users/Oscar%20Rojas/Downloads/csat-dashboard-v2_5.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,6 +58,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);
 .greeting{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--dark);margin-bottom:4px;}
 .subtitle{color:var(--stone);font-size:13px;}
 .period-badge{display:inline-flex;align-items:center;gap:6px;background:var(--gold);color:var(--dark);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-top:8px;}
+
+/* FILTERS BAR */
+.filters-bar{display:flex;gap:20px;margin-bottom:24px;flex-wrap:wrap;animation:fadeUp 0.5s ease 0.05s both;}
+.filter-group{display:flex;flex-direction:column;gap:6px;}
 
 /* MONTH FILTER */
 .month-filter{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;animation:fadeUp 0.5s ease 0.05s both;}
@@ -135,7 +139,65 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);
 .coaching-note-label{font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone);margin-bottom:6px;}
 .coaching-note-text{font-size:13px;color:var(--dark);line-height:1.6;background:#FFFBF0;border:1px solid var(--gold-light);border-radius:6px;padding:10px 12px;}
 
-/* COACHING LOG */
+/* COACHING VIEW */
+.cv-selectors{display:flex;gap:20px;margin-bottom:28px;flex-wrap:wrap;animation:fadeUp 0.5s ease both;}
+.cv-selector-group{display:flex;flex-direction:column;gap:6px;}
+.cv-label{font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone);}
+.cv-select{padding:10px 16px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--dark);background:white;outline:none;cursor:pointer;min-width:180px;transition:border-color 0.2s;}
+.cv-select:focus{border-color:var(--gold);}
+.cv-comparison{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:28px;animation:fadeUp 0.5s ease 0.1s both;}
+.cv-month-card{background:var(--card);border-radius:12px;border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;}
+.cv-month-header{padding:16px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.cv-month-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--dark);}
+.cv-month-agent{font-size:12px;color:var(--stone);}
+.cv-month-body{padding:22px;}
+.cv-total{margin-bottom:20px;}
+.cv-total-label{font-size:11px;color:var(--stone);font-weight:500;margin-bottom:2px;}
+.cv-total-number{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:var(--dark);line-height:1;}
+.cv-total-sub{font-size:11px;color:var(--stone);margin-top:2px;}
+.cv-metric-row{margin-bottom:14px;}
+.cv-metric-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
+.cv-metric-name{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--stone);}
+.cv-metric-right{display:flex;align-items:center;gap:8px;}
+.cv-metric-pct{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;}
+.cv-metric-count{font-size:11px;color:var(--stone);}
+.cv-bar-track{height:8px;background:#F0EDE9;border-radius:4px;overflow:hidden;}
+.cv-bar-fill{height:100%;border-radius:4px;transition:width 0.8s ease;}
+.cv-pos .cv-metric-pct{color:var(--green);}
+.cv-pos .cv-bar-fill{background:var(--green);}
+.cv-neu .cv-metric-pct{color:var(--amber);}
+.cv-neu .cv-bar-fill{background:var(--amber);}
+.cv-neg .cv-metric-pct{color:var(--red);}
+.cv-neg .cv-bar-fill{background:var(--red);}
+
+/* PERFORMANCE SCALE */
+.cv-scale-section{background:var(--card);border-radius:12px;border:1px solid var(--border);box-shadow:var(--shadow);padding:24px 28px;animation:fadeUp 0.5s ease 0.2s both;}
+.cv-scale-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--dark);margin-bottom:6px;}
+.cv-scale-subtitle{font-size:13px;color:var(--stone);margin-bottom:24px;}
+.cv-scale-agents{display:flex;flex-direction:column;gap:20px;}
+.cv-scale-agent-block{display:flex;flex-direction:column;gap:8px;}
+.cv-scale-agent-header{display:flex;align-items:center;justify-content:space-between;}
+.cv-scale-agent-name{font-size:13px;font-weight:600;color:var(--dark);}
+.cv-scale-agent-pct{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;}
+.cv-scale-track{position:relative;height:12px;background:#F0EDE9;border-radius:8px;overflow:visible;}
+.cv-scale-fill{height:100%;border-radius:8px;transition:width 1s ease;position:relative;}
+.cv-scale-marker{position:absolute;top:-4px;width:20px;height:20px;border-radius:50%;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.2);transform:translateX(-50%);transition:left 1s ease;}
+.cv-scale-labels{display:flex;justify-content:space-between;margin-top:6px;}
+.cv-scale-label{font-size:10px;color:var(--stone);text-align:center;}
+.cv-scale-label span{display:block;font-weight:600;color:var(--dark);}
+.cv-performance-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;}
+.badge-critical{background:#FDECEA;color:var(--red);}
+.badge-needs{background:#FEF3E2;color:#C0392B;}
+.badge-developing{background:#FEF9E7;color:#E67E22;}
+.badge-ontrack{background:#EBF5FB;color:#2980B9;}
+.badge-success{background:var(--green-light);color:var(--green);}
+.cv-months-compare{display:flex;align-items:center;gap:12px;margin-top:8px;}
+.cv-arrow{font-size:20px;color:var(--stone);}
+.cv-change-badge{font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;}
+.cv-change-up{background:var(--green-light);color:var(--green);}
+.cv-change-down{background:var(--red-light);color:var(--red);}
+.cv-change-same{background:var(--cream);color:var(--stone);}
+
 #coaching-tab{display:none;}
 .coaching-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
 .add-coaching-btn{background:var(--dark);color:white;border:none;padding:9px 18px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:6px;}
@@ -229,6 +291,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);
   <div class="tab-bar">
     <div class="tab active" onclick="switchTab(&#39;surveys&#39;,this)">My Surveys</div>
     <div class="tab" onclick="switchTab(&#39;coaching&#39;,this)">Coaching Log</div>
+    <div class="tab admin-only-tab" onclick="switchTab(&#39;coachingview&#39;,this)" style="display:none;">📊 Coaching View</div>
   </div>
 
   <!-- SURVEYS TAB -->
@@ -238,8 +301,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);
         <div class="greeting" id="greeting-text">Welcome</div>
         <div class="subtitle">Your complete CSAT history — use the filters to track your progress over time.</div>
       </div>
-
-      <div class="month-filter" id="month-filter"></div>
 
       <div class="csat-summary-card">
         <div class="csat-summary-top">
@@ -290,16 +351,45 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);
         </div>
       </div>
 
+      <div class="filters-bar">
+        <div class="filter-group">
+          <label class="cv-label">Month</label>
+          <select class="cv-select" id="month-filter-select" onchange="onMonthSelect(this.value)">
+            <option value="all">All Time</option>
+            <option value="2026-02">February 2026</option>
+            <option value="2026-03">March 2026</option>
+            <option value="2026-04">April 2026</option>
+            <option value="2026-05">May 2026</option>
+          </select>
+        </div>
+        <div class="filter-group admin-only-filter" style="display:none;">
+          <label class="cv-label">Agent</label>
+          <select class="cv-select" id="agent-filter-select" onchange="onAgentSelect(this.value)">
+            <option value="all">All Agents</option>
+            <option>Sharon Trejo</option>
+            <option>Fredy Alberto Romero</option>
+            <option>Christian Tovar</option>
+            <option>Bianca Estrada</option>
+            <option>Jesus Zarate</option>
+            <option>Ana Leon</option>
+            <option>Liliana Velasco Gantes</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="cv-label">Rating</label>
+          <select class="cv-select" id="rating-filter-select" onchange="onRatingSelect(this.value)">
+            <option value="all">All Ratings</option>
+            <option value="positive">Positive</option>
+            <option value="neutral">Neutral</option>
+            <option value="extreme">Extremely Dissatisfied</option>
+            <option value="mostly">Mostly Dissatisfied</option>
+            <option value="nocomment">⚠ No Comment</option>
+          </select>
+        </div>
+      </div>
+
       <div class="section-header">
         <div class="section-title">Customer Feedback</div>
-        <div class="filter-tabs">
-          <div class="filter-tab active" onclick="filterTickets(&#39;all&#39;,this)">All</div>
-          <div class="filter-tab green" onclick="filterTickets(&#39;positive&#39;,this)">Positive</div>
-          <div class="filter-tab blue" onclick="filterTickets(&#39;neutral&#39;,this)">Neutral</div>
-          <div class="filter-tab red" onclick="filterTickets(&#39;extreme&#39;,this)">Extremely Dissatisfied</div>
-          <div class="filter-tab amber" onclick="filterTickets(&#39;mostly&#39;,this)">Mostly Dissatisfied</div>
-          <div class="filter-tab" onclick="filterTickets(&#39;nocomment&#39;,this)">⚠ No Comment</div>
-        </div>
       </div>
       <div class="tickets-list" id="tickets-list"></div>
     </div>
@@ -322,6 +412,57 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);
     </div>
   </div>
 </div>
+
+<!-- COACHING VIEW TAB -->
+  <div id="coachingview-tab" style="display:none;">
+    <div class="main">
+      <div class="page-header">
+        <div class="greeting">Coaching View</div>
+        <div class="subtitle">Compare two months side by side to show an agent their progress during a coaching session.</div>
+      </div>
+
+      <!-- Selectors -->
+      <div class="cv-selectors">
+        <div class="cv-selector-group">
+          <label class="cv-label">Agent</label>
+          <select class="cv-select" id="cv-agent" onchange="renderCoachingView()">
+            <option value="all">All Agents</option>
+            <option>Sharon Trejo</option>
+            <option>Fredy Alberto Romero</option>
+            <option>Christian Tovar</option>
+            <option>Bianca Estrada</option>
+            <option>Jesus Zarate</option>
+            <option>Ana Leon</option>
+            <option>Liliana Velasco Gantes</option>
+          </select>
+        </div>
+        <div class="cv-selector-group">
+          <label class="cv-label">Month A</label>
+          <select class="cv-select" id="cv-month-a" onchange="renderCoachingView()">
+            <option value="2026-02">February 2026</option>
+            <option value="2026-03">March 2026</option>
+            <option value="2026-04">April 2026</option>
+            <option value="2026-05" selected="">May 2026</option>
+          </select>
+        </div>
+        <div class="cv-selector-group">
+          <label class="cv-label">Month B</label>
+          <select class="cv-select" id="cv-month-b" onchange="renderCoachingView()">
+            <option value="2026-02" selected="">February 2026</option>
+            <option value="2026-03">March 2026</option>
+            <option value="2026-04">April 2026</option>
+            <option value="2026-05">May 2026</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Comparison Cards -->
+      <div class="cv-comparison" id="cv-comparison"></div>
+
+      <!-- Performance Scale -->
+      <div class="cv-scale-section" id="cv-scale-section"></div>
+    </div>
+  </div>
 
 <!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay">
@@ -397,9 +538,12 @@ function showDashboard() {
   document.getElementById('agent-name-top').textContent = name;
   document.getElementById('greeting-text').textContent = isAdmin ? 'Admin Dashboard' : `Hello, ${currentAgent.split(' ')[0]}.`;
 
-  if (isAdmin) document.getElementById('add-coaching-btn').style.display='flex';
+  if (isAdmin) {
+    document.getElementById('add-coaching-btn').style.display='flex';
+    document.querySelectorAll('.admin-only-tab').forEach(t=>t.style.display='block');
+    document.querySelectorAll('.admin-only-filter').forEach(t=>t.style.display='flex');
+  }
 
-  buildMonthFilter();
   renderTickets();
   renderCoaching();
 }
@@ -410,34 +554,176 @@ function switchTab(tab, el) {
   el.classList.add('active');
   document.getElementById('surveys-tab').style.display = tab==='surveys'?'block':'none';
   document.getElementById('coaching-tab').style.display = tab==='coaching'?'block':'none';
+  document.getElementById('coachingview-tab').style.display = tab==='coachingview'?'block':'none';
+  if(tab==='coachingview') renderCoachingView();
 }
 
-// ── MONTH FILTER ──
-function buildMonthFilter() {
-  const tickets = getAgentTickets();
-  const months = [...new Set(tickets.map(t=>t.month))].sort();
-  const labels = {'2026-02':'February 2026','2026-03':'March 2026','2026-04':'April 2026','2026-05':'May 2026'};
-  const container = document.getElementById('month-filter');
-  container.innerHTML = '';
+const MONTH_LABELS = {'2026-02':'February 2026','2026-03':'March 2026','2026-04':'April 2026','2026-05':'May 2026'};
 
-  [['all','All Time'], ...months.map(m=>[m, labels[m]||m])].forEach(([val,label],i) => {
-    const btn = document.createElement('button');
-    btn.className = 'month-btn' + (i===0?' active':'');
-    btn.textContent = label;
-    btn.onclick = () => {
-      document.querySelectorAll('.month-btn').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      currentMonth = val;
-      renderTickets();
-    };
-    container.appendChild(btn);
-  });
+function getMonthStats(month, agent) {
+  let tickets = ALL_TICKETS.filter(t=>t.month===month && t.agent!=='Unassigned');
+  if(agent && agent!=='all') tickets = tickets.filter(t=>t.agent===agent);
+  const total = tickets.length;
+  const pos = tickets.filter(t=>t.rating==='Extremely satisfied'||t.rating==='Mostly satisfied').length;
+  const xsat = tickets.filter(t=>t.rating==='Extremely satisfied').length;
+  const msat = tickets.filter(t=>t.rating==='Mostly satisfied').length;
+  const neu = tickets.filter(t=>t.rating==='Neither satisfied nor dissatisfied').length;
+  const neg = tickets.filter(t=>t.rating==='Extremely dissatisfied'||t.rating==='Mostly dissatisfied').length;
+  const xdis = tickets.filter(t=>t.rating==='Extremely dissatisfied').length;
+  const mdis = tickets.filter(t=>t.rating==='Mostly dissatisfied').length;
+  const pct = n => total>0?Math.round((n/total)*100):0;
+  return {total,pos,xsat,msat,neu,neg,xdis,mdis,posPct:pct(pos),neuPct:pct(neu),negPct:pct(neg)};
 }
+
+function getPerformanceBadge(pct) {
+  if(pct>=90) return {label:'Success',cls:'badge-success',color:'#27AE60'};
+  if(pct>=80) return {label:'On Track',cls:'badge-ontrack',color:'#2980B9'};
+  if(pct>=70) return {label:'Developing',cls:'badge-developing',color:'#E67E22'};
+  if(pct>=60) return {label:'Needs Improvement',cls:'badge-needs',color:'#E67E22'};
+  return {label:'Critical',cls:'badge-critical',color:'#C0392B'};
+}
+
+function renderCoachingView() {
+  const agent = document.getElementById('cv-agent').value;
+  const monthA = document.getElementById('cv-month-a').value;
+  const monthB = document.getElementById('cv-month-b').value;
+  const agentLabel = agent==='all'?'All Agents':agent;
+
+  const statsA = getMonthStats(monthA, agent);
+  const statsB = getMonthStats(monthB, agent);
+
+  const renderCard = (stats, month) => `
+    <div class="cv-month-card">
+      <div class="cv-month-header">
+        <div>
+          <div class="cv-month-title">${MONTH_LABELS[month]||month}</div>
+          <div class="cv-month-agent">${agentLabel}</div>
+        </div>
+        <div class="cv-performance-badge ${getPerformanceBadge(stats.posPct).cls}">${getPerformanceBadge(stats.posPct).label}</div>
+      </div>
+      <div class="cv-month-body">
+        <div class="cv-total">
+          <div class="cv-total-label">Responses received</div>
+          <div class="cv-total-number">${stats.total}</div>
+          <div class="cv-total-sub">Total surveys this month</div>
+        </div>
+        <div class="cv-metric-row cv-pos">
+          <div class="cv-metric-top">
+            <div class="cv-metric-name">Positive</div>
+            <div class="cv-metric-right">
+              <div class="cv-metric-pct">${stats.posPct}%</div>
+              <div class="cv-metric-count">${stats.pos} total (${stats.xsat} extremely sat. / ${stats.msat} mostly sat.)</div>
+            </div>
+          </div>
+          <div class="cv-bar-track"><div class="cv-bar-fill" style="width:${stats.posPct}%"></div></div>
+        </div>
+        <div class="cv-metric-row cv-neu">
+          <div class="cv-metric-top">
+            <div class="cv-metric-name">Neutral</div>
+            <div class="cv-metric-right">
+              <div class="cv-metric-pct">${stats.neuPct}%</div>
+              <div class="cv-metric-count">${stats.neu} responses</div>
+            </div>
+          </div>
+          <div class="cv-bar-track"><div class="cv-bar-fill" style="width:${stats.neuPct}%"></div></div>
+        </div>
+        <div class="cv-metric-row cv-neg">
+          <div class="cv-metric-top">
+            <div class="cv-metric-name">Negative</div>
+            <div class="cv-metric-right">
+              <div class="cv-metric-pct">${stats.negPct}%</div>
+              <div class="cv-metric-count">${stats.neg} total (${stats.xdis} extremely dis. / ${stats.mdis} mostly dis.)</div>
+            </div>
+          </div>
+          <div class="cv-bar-track"><div class="cv-bar-fill" style="width:${stats.negPct}%"></div></div>
+        </div>
+      </div>
+    </div>`;
+
+  document.getElementById('cv-comparison').innerHTML =
+    renderCard(statsA, monthA) + renderCard(statsB, monthB);
+
+  // Performance Scale
+  const change = statsA.posPct - statsB.posPct;
+  const changeLabel = change>0?`▲ +${change}% from ${MONTH_LABELS[monthB]}`:change<0?`▼ ${change}% from ${MONTH_LABELS[monthB]}`:`No change from ${MONTH_LABELS[monthB]}`;
+  const changeCls = change>0?'cv-change-up':change<0?'cv-change-down':'cv-change-same';
+  const badgeA = getPerformanceBadge(statsA.posPct);
+  const badgeB = getPerformanceBadge(statsB.posPct);
+
+  document.getElementById('cv-scale-section').innerHTML = `
+    <div class="cv-scale-section">
+      <div class="cv-scale-title">Performance Scale — Positive CSAT %</div>
+      <div class="cv-scale-subtitle">Based on positive satisfaction rate. Target: 90%+ (Success)</div>
+      <div class="cv-scale-agents">
+        <div class="cv-scale-agent-block">
+          <div class="cv-scale-agent-header">
+            <div>
+              <div class="cv-scale-agent-name">${agentLabel} — ${MONTH_LABELS[monthA]}</div>
+              <div class="cv-months-compare">
+                <div class="cv-performance-badge ${badgeA.cls}">${badgeA.label}</div>
+                <div class="cv-change-badge ${changeCls}">${changeLabel}</div>
+              </div>
+            </div>
+            <div class="cv-scale-agent-pct" style="color:${badgeA.color}">${statsA.posPct}%</div>
+          </div>
+          <div class="cv-scale-track">
+            <div class="cv-scale-fill" style="width:${statsA.posPct}%;background:${badgeA.color};">
+              <div class="cv-scale-marker" style="left:100%;background:${badgeA.color};"></div>
+            </div>
+          </div>
+          <div class="cv-scale-labels">
+            <div class="cv-scale-label"><span>0%</span></div>
+            <div class="cv-scale-label"><span>50%</span>Critical</div>
+            <div class="cv-scale-label"><span>60%</span>Needs Improvement</div>
+            <div class="cv-scale-label"><span>70%</span>Developing</div>
+            <div class="cv-scale-label"><span>80%</span>On Track</div>
+            <div class="cv-scale-label"><span>90%+</span>Success</div>
+          </div>
+        </div>
+        <div class="cv-scale-agent-block">
+          <div class="cv-scale-agent-header">
+            <div>
+              <div class="cv-scale-agent-name">${agentLabel} — ${MONTH_LABELS[monthB]}</div>
+              <div class="cv-months-compare">
+                <div class="cv-performance-badge ${badgeB.cls}">${badgeB.label}</div>
+              </div>
+            </div>
+            <div class="cv-scale-agent-pct" style="color:${badgeB.color}">${statsB.posPct}%</div>
+          </div>
+          <div class="cv-scale-track">
+            <div class="cv-scale-fill" style="width:${statsB.posPct}%;background:${badgeB.color};">
+              <div class="cv-scale-marker" style="left:100%;background:${badgeB.color};"></div>
+            </div>
+          </div>
+          <div class="cv-scale-labels">
+            <div class="cv-scale-label"><span>0%</span></div>
+            <div class="cv-scale-label"><span>50%</span>Critical</div>
+            <div class="cv-scale-label"><span>60%</span>Needs Improvement</div>
+            <div class="cv-scale-label"><span>70%</span>Developing</div>
+            <div class="cv-scale-label"><span>80%</span>On Track</div>
+            <div class="cv-scale-label"><span>90%+</span>Success</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ── FILTERS ──
+let currentAgentFilter = 'all';
+
+function onMonthSelect(val) { currentMonth=val; renderTickets(); }
+function onAgentSelect(val) { currentAgentFilter=val; renderTickets(); }
+function onRatingSelect(val) { currentFilter=val; renderTickets(); }
 
 // ── DATA ──
 function getAgentTickets() {
-  if (isAdmin) return ALL_TICKETS.filter(t=>t.agent!=='Unassigned');
-  return ALL_TICKETS.filter(t=>t.agent===currentAgent);
+  let tickets = ALL_TICKETS.filter(t=>t.agent!=='Unassigned');
+  if (isAdmin) {
+    if(currentAgentFilter && currentAgentFilter!=='all') tickets = tickets.filter(t=>t.agent===currentAgentFilter);
+  } else {
+    tickets = tickets.filter(t=>t.agent===currentAgent);
+  }
+  return tickets;
 }
 
 function getFilteredTickets() {
