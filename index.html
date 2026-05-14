@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0065)file:///C:/Users/Oscar%20Rojas/Downloads/csat-dashboard-v3_5.html -->
+<!-- saved from url=(0065)file:///C:/Users/Oscar%20Rojas/Downloads/csat-dashboard-v3_6.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -792,7 +792,8 @@ function renderTickets() {
     const rl = ratingLabel(t.rating);
     const hasComment = t.comment && t.comment.trim().length>0;
     const negNoComment = isNegNoComment(t);
-    const dateStr = new Date(t.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    const dateParts = t.date.split('-');
+    const dateStr = new Date(parseInt(dateParts[0]), parseInt(dateParts[1])-1, parseInt(dateParts[2])).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
     const coachEntry = agentCoaching.find(c=>c.ticket===String(t.ticket_id));
     const agentLine = isAdmin ? `<div class="ticket-category" style="background:#E8E0D5;">${t.agent}</div>` : '';
 
