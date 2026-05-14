@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0065)file:///C:/Users/Oscar%20Rojas/Downloads/csat-dashboard-v3_3.html -->
+<!-- saved from url=(0065)file:///C:/Users/Oscar%20Rojas/Downloads/csat-dashboard-v3_4.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -630,19 +630,29 @@ function updateFilterLabel(ddId, labelId, allLabel) {
 }
 
 function handleCbClick(e, ddId) {
-  // If user holds Ctrl or Shift, allow multi-select freely
-  if (e.ctrlKey || e.shiftKey || e.metaKey) {
+  // Small delay to let the checkbox state update first
+  setTimeout(() => {
+    const allCbs = [...document.querySelectorAll(`#${ddId} input[type=checkbox]`)];
+    const clickedCb = e.target;
+
+    // If Ctrl/Shift held, allow free multi-select
+    if (e.ctrlKey || e.shiftKey || e.metaKey) {
+      const anyChecked = allCbs.some(cb=>cb.checked);
+      if (!anyChecked) allCbs.forEach(cb=>cb.checked=true);
+      updateFilters();
+      return;
+    }
+
+    // Single click: if this box is now checked, uncheck all others
+    if (clickedCb.checked) {
+      allCbs.forEach(cb => { if(cb !== clickedCb) cb.checked = false; });
+    } else {
+      // If unchecking the last one, reset all to checked
+      const anyChecked = allCbs.some(cb=>cb.checked);
+      if (!anyChecked) allCbs.forEach(cb=>cb.checked=true);
+    }
     updateFilters();
-    return;
-  }
-  // Otherwise: clicking a checkbox selects ONLY that one (deselects others)
-  const clickedCb = e.target;
-  const allCbs = document.querySelectorAll(`#${ddId} input[type=checkbox]`);
-  allCbs.forEach(cb => { cb.checked = cb === clickedCb ? clickedCb.checked : false; });
-  // If user unchecked the only checked one, re-check all (reset to all)
-  const anyChecked = [...allCbs].some(cb=>cb.checked);
-  if (!anyChecked) allCbs.forEach(cb=>cb.checked=true);
-  updateFilters();
+  }, 0);
 }
 
 function updateFilters() {
