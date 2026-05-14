@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0065)file:///C:/Users/Oscar%20Rojas/Downloads/csat-dashboard-v3_4.html -->
+<!-- saved from url=(0065)file:///C:/Users/Oscar%20Rojas/Downloads/csat-dashboard-v3_5.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -675,26 +675,44 @@ function getAgentTickets() {
 }
 
 function getFilteredTickets() {
-  let t = getAgentTickets();
+  let t = ALL_TICKETS.filter(x=>x.agent!=='Unassigned');
 
-  // Month filter
+  // Agent filter — always apply first
+  if (isAdmin) {
+    const selectedAgents = getCheckedValues('agent-dd');
+    if (selectedAgents.length > 0 && selectedAgents.length < 7) {
+      t = t.filter(x=>selectedAgents.includes(x.agent));
+    }
+  } else {
+    t = t.filter(x=>x.agent===currentAgent);
+  }
+
+  // Month filter — strict match
   const selectedMonths = getCheckedValues('month-dd');
-  if (selectedMonths.length > 0) t = t.filter(x=>selectedMonths.includes(x.month));
+  if (selectedMonths.length > 0 && selectedMonths.length < 4) {
+    t = t.filter(x=>selectedMonths.includes(x.month));
+  }
 
-  // Rating filter
+  // Rating filter — strict match
   const selectedRatings = getCheckedValues('rating-dd');
   const noCommentSelected = selectedRatings.includes('nocomment');
   const ratingValues = selectedRatings.filter(r=>r!=='nocomment');
 
-  if (noCommentSelected && ratingValues.length > 0) {
-    t = t.filter(x =>
-      ratingValues.includes(x.rating) ||
-      ((!x.comment||!x.comment.trim()) && (x.rating==='Extremely dissatisfied'||x.rating==='Mostly dissatisfied'))
-    );
-  } else if (noCommentSelected) {
-    t = t.filter(x=>(!x.comment||!x.comment.trim()) && (x.rating==='Extremely dissatisfied'||x.rating==='Mostly dissatisfied'));
-  } else if (ratingValues.length > 0) {
-    t = t.filter(x=>ratingValues.includes(x.rating));
+  const allRatings = ['Extremely satisfied','Mostly satisfied','Neither satisfied nor dissatisfied','Mostly dissatisfied','Extremely dissatisfied'];
+  const allRatingsSelected = allRatings.every(r=>ratingValues.includes(r));
+
+  if (!allRatingsSelected || noCommentSelected) {
+    if (noCommentSelected && ratingValues.length === 0) {
+      // Only no-comment negative
+      t = t.filter(x=>(!x.comment||!x.comment.trim()) && (x.rating==='Extremely dissatisfied'||x.rating==='Mostly dissatisfied'));
+    } else if (noCommentSelected && ratingValues.length > 0) {
+      t = t.filter(x=>
+        ratingValues.includes(x.rating) ||
+        ((!x.comment||!x.comment.trim()) && (x.rating==='Extremely dissatisfied'||x.rating==='Mostly dissatisfied'))
+      );
+    } else if (ratingValues.length > 0) {
+      t = t.filter(x=>ratingValues.includes(x.rating));
+    }
   }
 
   return t;
@@ -702,8 +720,24 @@ function getFilteredTickets() {
 
 // ── RENDER TICKETS ──
 function renderTickets() {
+  // Use same strict filters for stats
+  let all = ALL_TICKETS.filter(x=>x.agent!=='Unassigned');
+
+  // Agent filter for stats
+  if (isAdmin) {
+    const selectedAgents = getCheckedValues('agent-dd');
+    if (selectedAgents.length > 0 && selectedAgents.length < 7) {
+      all = all.filter(x=>selectedAgents.includes(x.agent));
+    }
+  } else {
+    all = all.filter(x=>x.agent===currentAgent);
+  }
+
+  // Month filter for stats
   const selectedMonths = getCheckedValues('month-dd');
-  const all = getAgentTickets().filter(t=>selectedMonths.length===0||selectedMonths.includes(t.month));
+  if (selectedMonths.length > 0 && selectedMonths.length < 4) {
+    all = all.filter(x=>selectedMonths.includes(x.month));
+  }
   const pos = all.filter(t=>t.rating==='Extremely satisfied'||t.rating==='Mostly satisfied').length;
   const neu = all.filter(t=>t.rating==='Neither satisfied nor dissatisfied').length;
   const neg = all.filter(t=>t.rating==='Extremely dissatisfied'||t.rating==='Mostly dissatisfied').length;
