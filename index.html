@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0063)file:///C:/Users/Oscar%20Rojas/Downloads/csat-dashboard-v3.html -->
+<!-- saved from url=(0065)file:///C:/Users/Oscar%20Rojas/Downloads/csat-dashboard-v3_1.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,6 +58,21 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);
 .greeting{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--dark);margin-bottom:4px;}
 .subtitle{color:var(--stone);font-size:13px;}
 .period-badge{display:inline-flex;align-items:center;gap:6px;background:var(--gold);color:var(--dark);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-top:8px;}
+
+/* CHECKBOX DROPDOWN FILTERS */
+.cb-dropdown{position:relative;min-width:200px;}
+.cb-trigger{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;background:white;cursor:pointer;font-size:13px;color:var(--dark);transition:border-color 0.2s;user-select:none;}
+.cb-trigger:hover{border-color:var(--gold);}
+.cb-dropdown.open .cb-trigger{border-color:var(--gold);box-shadow:0 0 0 3px rgba(196,151,58,0.12);}
+.cb-arrow{font-size:11px;color:var(--stone);transition:transform 0.2s;}
+.cb-dropdown.open .cb-arrow{transform:rotate(180deg);}
+.cb-menu{position:absolute;top:calc(100% + 6px);left:0;right:0;background:white;border:1.5px solid var(--border);border-radius:10px;box-shadow:0 8px 24px rgba(26,22,18,0.12);z-index:300;padding:8px 0;display:none;min-width:220px;}
+.cb-dropdown.open .cb-menu{display:block;}
+.cb-item{display:flex;align-items:center;gap:10px;padding:8px 14px;font-size:13px;color:var(--dark);cursor:pointer;transition:background 0.15s;}
+.cb-item:hover{background:var(--cream);}
+.cb-item input[type=checkbox]{width:15px;height:15px;accent-color:var(--gold);cursor:pointer;flex-shrink:0;}
+.cb-nocomment{border-top:1px solid var(--border);margin-top:4px;padding-top:12px;color:var(--amber);}
+.filter-badge{display:inline-flex;align-items:center;justify-content:center;background:var(--gold);color:var(--dark);border-radius:50%;width:18px;height:18px;font-size:10px;font-weight:700;margin-left:6px;}
 
 /* FILTERS BAR */
 .filters-bar{display:flex;gap:20px;margin-bottom:24px;flex-wrap:wrap;animation:fadeUp 0.5s ease 0.05s both;}
@@ -353,39 +368,60 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);
       </div>
 
       <div class="filters-bar">
+        <!-- MONTH FILTER -->
         <div class="filter-group">
           <label class="cv-label">Month</label>
-          <select class="cv-select" id="month-filter-select" onchange="onMonthSelect(this.value)">
-            <option value="all">All Time</option>
-            <option value="2026-02">February 2026</option>
-            <option value="2026-03">March 2026</option>
-            <option value="2026-04">April 2026</option>
-            <option value="2026-05">May 2026</option>
-          </select>
+          <div class="cb-dropdown" id="month-dd">
+            <div class="cb-trigger" onclick="toggleDD(&#39;month-dd&#39;)">
+              <span id="month-dd-label">All Months</span>
+              <span class="cb-arrow">▾</span>
+            </div>
+            <div class="cb-menu">
+              <label class="cb-item"><input type="checkbox" value="2026-02" checked="" onchange="updateFilters()"> February 2026</label>
+              <label class="cb-item"><input type="checkbox" value="2026-03" checked="" onchange="updateFilters()"> March 2026</label>
+              <label class="cb-item"><input type="checkbox" value="2026-04" checked="" onchange="updateFilters()"> April 2026</label>
+              <label class="cb-item"><input type="checkbox" value="2026-05" checked="" onchange="updateFilters()"> May 2026</label>
+            </div>
+          </div>
         </div>
+
+        <!-- AGENT FILTER (Admin only) -->
         <div class="filter-group admin-only-filter" style="display:none;">
           <label class="cv-label">Agent</label>
-          <select class="cv-select" id="agent-filter-select" onchange="onAgentSelect(this.value)">
-            <option value="all">All Agents</option>
-            <option>Sharon Trejo</option>
-            <option>Fredy Alberto Romero</option>
-            <option>Christian Tovar</option>
-            <option>Bianca Estrada</option>
-            <option>Jesus Zarate</option>
-            <option>Ana Leon</option>
-            <option>Liliana Velasco Gantes</option>
-          </select>
+          <div class="cb-dropdown" id="agent-dd">
+            <div class="cb-trigger" onclick="toggleDD(&#39;agent-dd&#39;)">
+              <span id="agent-dd-label">All Agents</span>
+              <span class="cb-arrow">▾</span>
+            </div>
+            <div class="cb-menu">
+              <label class="cb-item"><input type="checkbox" value="Sharon Trejo" checked="" onchange="updateFilters()"> Sharon Trejo</label>
+              <label class="cb-item"><input type="checkbox" value="Fredy Alberto Romero" checked="" onchange="updateFilters()"> Fredy Alberto Romero</label>
+              <label class="cb-item"><input type="checkbox" value="Christian Tovar" checked="" onchange="updateFilters()"> Christian Tovar</label>
+              <label class="cb-item"><input type="checkbox" value="Bianca Estrada" checked="" onchange="updateFilters()"> Bianca Estrada</label>
+              <label class="cb-item"><input type="checkbox" value="Jesus Zarate" checked="" onchange="updateFilters()"> Jesus Zarate</label>
+              <label class="cb-item"><input type="checkbox" value="Ana Leon" checked="" onchange="updateFilters()"> Ana Leon</label>
+              <label class="cb-item"><input type="checkbox" value="Liliana Velasco Gantes" checked="" onchange="updateFilters()"> Liliana Velasco Gantes</label>
+            </div>
+          </div>
         </div>
+
+        <!-- RATING FILTER -->
         <div class="filter-group">
           <label class="cv-label">Rating</label>
-          <select class="cv-select" id="rating-filter-select" onchange="onRatingSelect(this.value)">
-            <option value="all">All Ratings</option>
-            <option value="positive">Positive</option>
-            <option value="neutral">Neutral</option>
-            <option value="extreme">Extremely Dissatisfied</option>
-            <option value="mostly">Mostly Dissatisfied</option>
-            <option value="nocomment">⚠ No Comment</option>
-          </select>
+          <div class="cb-dropdown" id="rating-dd">
+            <div class="cb-trigger" onclick="toggleDD(&#39;rating-dd&#39;)">
+              <span id="rating-dd-label">All Ratings</span>
+              <span class="cb-arrow">▾</span>
+            </div>
+            <div class="cb-menu">
+              <label class="cb-item"><input type="checkbox" value="Extremely satisfied" checked="" onchange="updateFilters()"> Extremely Satisfied</label>
+              <label class="cb-item"><input type="checkbox" value="Mostly satisfied" checked="" onchange="updateFilters()"> Mostly Satisfied</label>
+              <label class="cb-item"><input type="checkbox" value="Neither satisfied nor dissatisfied" checked="" onchange="updateFilters()"> Neutral</label>
+              <label class="cb-item"><input type="checkbox" value="Mostly dissatisfied" checked="" onchange="updateFilters()"> Mostly Dissatisfied</label>
+              <label class="cb-item"><input type="checkbox" value="Extremely dissatisfied" checked="" onchange="updateFilters()"> Extremely Dissatisfied</label>
+              <label class="cb-item cb-nocomment"><input type="checkbox" value="nocomment" onchange="updateFilters()"> ⚠ No Comment (negative)</label>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -566,17 +602,46 @@ function switchTab(tab, el) {
 
 const MONTH_LABELS = {'2026-02':'February 2026','2026-03':'March 2026','2026-04':'April 2026','2026-05':'May 2026'};
 
-// ── FILTERS ──
-let currentAgentFilter = 'all';
-function onMonthSelect(val) { currentMonth=val; renderTickets(); }
-function onAgentSelect(val) { currentAgentFilter=val; renderTickets(); }
-function onRatingSelect(val) { currentFilter=val; renderTickets(); }
+// ── CHECKBOX DROPDOWN FILTERS ──
+function toggleDD(id) {
+  const dd = document.getElementById(id);
+  const isOpen = dd.classList.contains('open');
+  document.querySelectorAll('.cb-dropdown.open').forEach(d=>d.classList.remove('open'));
+  if (!isOpen) dd.classList.add('open');
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.cb-dropdown')) {
+    document.querySelectorAll('.cb-dropdown.open').forEach(d=>d.classList.remove('open'));
+  }
+});
+
+function getCheckedValues(ddId) {
+  return [...document.querySelectorAll(`#${ddId} input[type=checkbox]:checked`)].map(cb=>cb.value);
+}
+
+function updateFilterLabel(ddId, labelId, allLabel) {
+  const all = document.querySelectorAll(`#${ddId} input[type=checkbox]`);
+  const checked = document.querySelectorAll(`#${ddId} input[type=checkbox]:checked`);
+  const label = document.getElementById(labelId);
+  if (checked.length === 0) label.textContent = 'None selected';
+  else if (checked.length === all.length) label.textContent = allLabel;
+  else label.textContent = `${checked.length} selected`;
+}
+
+function updateFilters() {
+  updateFilterLabel('month-dd', 'month-dd-label', 'All Months');
+  updateFilterLabel('agent-dd', 'agent-dd-label', 'All Agents');
+  updateFilterLabel('rating-dd', 'rating-dd-label', 'All Ratings');
+  renderTickets();
+}
 
 // ── DATA ──
 function getAgentTickets() {
-  let t = ALL_TICKETS.filter(t=>t.agent!=='Unassigned');
+  let t = ALL_TICKETS.filter(x=>x.agent!=='Unassigned');
   if (isAdmin) {
-    if(currentAgentFilter && currentAgentFilter!=='all') t = t.filter(x=>x.agent===currentAgentFilter);
+    const selectedAgents = getCheckedValues('agent-dd');
+    if (selectedAgents.length > 0) t = t.filter(x=>selectedAgents.includes(x.agent));
   } else {
     t = t.filter(x=>x.agent===currentAgent);
   }
@@ -585,18 +650,34 @@ function getAgentTickets() {
 
 function getFilteredTickets() {
   let t = getAgentTickets();
-  if (currentMonth !== 'all') t = t.filter(x=>x.month===currentMonth);
-  if (currentFilter==='positive') t = t.filter(x=>x.rating.toLowerCase().includes('satisfied') && !x.rating.toLowerCase().includes('dis'));
-  else if (currentFilter==='neutral') t = t.filter(x=>x.rating.toLowerCase().includes('neither') || x.rating.toLowerCase().includes('mostly satisfied'));
-  else if (currentFilter==='extreme') t = t.filter(x=>x.rating==='Extremely dissatisfied');
-  else if (currentFilter==='mostly') t = t.filter(x=>x.rating==='Mostly dissatisfied');
-  else if (currentFilter==='nocomment') t = t.filter(x=>(!x.comment||!x.comment.trim()) && (x.rating==='Extremely dissatisfied'||x.rating==='Mostly dissatisfied'));
+
+  // Month filter
+  const selectedMonths = getCheckedValues('month-dd');
+  if (selectedMonths.length > 0) t = t.filter(x=>selectedMonths.includes(x.month));
+
+  // Rating filter
+  const selectedRatings = getCheckedValues('rating-dd');
+  const noCommentSelected = selectedRatings.includes('nocomment');
+  const ratingValues = selectedRatings.filter(r=>r!=='nocomment');
+
+  if (noCommentSelected && ratingValues.length > 0) {
+    t = t.filter(x =>
+      ratingValues.includes(x.rating) ||
+      ((!x.comment||!x.comment.trim()) && (x.rating==='Extremely dissatisfied'||x.rating==='Mostly dissatisfied'))
+    );
+  } else if (noCommentSelected) {
+    t = t.filter(x=>(!x.comment||!x.comment.trim()) && (x.rating==='Extremely dissatisfied'||x.rating==='Mostly dissatisfied'));
+  } else if (ratingValues.length > 0) {
+    t = t.filter(x=>ratingValues.includes(x.rating));
+  }
+
   return t;
 }
 
 // ── RENDER TICKETS ──
 function renderTickets() {
-  const all = getAgentTickets().filter(t=>currentMonth==='all'||t.month===currentMonth);
+  const selectedMonths = getCheckedValues('month-dd');
+  const all = getAgentTickets().filter(t=>selectedMonths.length===0||selectedMonths.includes(t.month));
   const pos = all.filter(t=>t.rating==='Extremely satisfied'||t.rating==='Mostly satisfied').length;
   const neu = all.filter(t=>t.rating==='Neither satisfied nor dissatisfied').length;
   const neg = all.filter(t=>t.rating==='Extremely dissatisfied'||t.rating==='Mostly dissatisfied').length;
@@ -615,8 +696,10 @@ function renderTickets() {
   document.getElementById('s-neu-count').textContent=neu+' responses';
   document.getElementById('s-neg-count').textContent=neg+' responses';
 
-  const mLabels = {'all':'All Time','2026-02':'February 2026','2026-03':'March 2026','2026-04':'April 2026','2026-05':'May 2026'};
-  document.getElementById('csat-period-tag').textContent = mLabels[currentMonth]||currentMonth;
+  const mLabels = {'2026-02':'Feb','2026-03':'Mar','2026-04':'Apr','2026-05':'May'};
+  const selMonths = getCheckedValues('month-dd');
+  const periodText = selMonths.length===0?'No Month Selected':selMonths.length===4?'All Time':selMonths.map(m=>mLabels[m]||m).join(', ');
+  document.getElementById('csat-period-tag').textContent = periodText;
 
   const filtered = getFilteredTickets();
   const list = document.getElementById('tickets-list');
