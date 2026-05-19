@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0066)file:///C:/Users/Oscar%20Rojas/Downloads/csat-dashboard-v3_13.html -->
+<!-- saved from url=(0066)file:///C:/Users/Oscar%20Rojas/Downloads/csat-dashboard-v3_14.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -71,6 +71,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);
 .cb-item{display:flex;align-items:center;gap:10px;padding:8px 14px;font-size:13px;color:var(--dark);cursor:pointer;transition:background 0.15s;}
 .cb-item:hover{background:var(--cream);}
 .cb-item input[type=checkbox]{width:15px;height:15px;accent-color:var(--gold);cursor:pointer;flex-shrink:0;}
+.cb-item input[type=radio]{width:15px;height:15px;accent-color:var(--gold);cursor:pointer;flex-shrink:0;}
 .cb-nocomment{border-top:1px solid var(--border);margin-top:4px;padding-top:12px;color:var(--amber);}
 .filter-badge{display:inline-flex;align-items:center;justify-content:center;background:var(--gold);color:var(--dark);border-radius:50%;width:18px;height:18px;font-size:10px;font-weight:700;margin-left:6px;}
 
@@ -447,6 +448,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);
             </div>
           </div>
         </div>
+
+        <!-- COACHING FILTER -->
+        <div class="filter-group">
+          <label class="cv-label">Coaching</label>
+          <div class="cb-dropdown" id="coaching-filter-dd">
+            <div class="cb-trigger" onclick="toggleDD(&#39;coaching-filter-dd&#39;)">
+              <span id="coaching-filter-dd-label">All</span>
+              <span class="cb-arrow">▾</span>
+            </div>
+            <div class="cb-menu">
+              <label class="cb-item"><input type="radio" name="coaching-filter" value="all" checked="" onclick="updateCoachingFilter(&#39;all&#39;)"> All Tickets</label>
+              <label class="cb-item"><input type="radio" name="coaching-filter" value="yes" onclick="updateCoachingFilter(&#39;yes&#39;)"> ✅ Coached (Yes)</label>
+              <label class="cb-item"><input type="radio" name="coaching-filter" value="no" onclick="updateCoachingFilter(&#39;no&#39;)"> ○ Not Coached (No)</label>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="section-header">
@@ -469,6 +486,74 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);
           <button class="add-coaching-btn" id="add-coaching-btn" onclick="openModal()" style="display:none;">+ Add Entry</button>
         </div>
       </div>
+
+      <!-- Coaching Log Filters -->
+      <div class="filters-bar" style="margin-bottom:20px;">
+        <div class="filter-group">
+          <label class="cv-label">Month</label>
+          <div class="cb-dropdown" id="cl-month-dd">
+            <div class="cb-trigger" onclick="toggleDD(&#39;cl-month-dd&#39;)">
+              <span id="cl-month-dd-label">All Months</span>
+              <span class="cb-arrow">▾</span>
+            </div>
+            <div class="cb-menu">
+              <label class="cb-item"><input type="checkbox" value="2026-02" checked="" onclick="handleCbClick(event,&#39;cl-month-dd&#39;);renderCoaching()"> February 2026</label>
+              <label class="cb-item"><input type="checkbox" value="2026-03" checked="" onclick="handleCbClick(event,&#39;cl-month-dd&#39;);renderCoaching()"> March 2026</label>
+              <label class="cb-item"><input type="checkbox" value="2026-04" checked="" onclick="handleCbClick(event,&#39;cl-month-dd&#39;);renderCoaching()"> April 2026</label>
+              <label class="cb-item"><input type="checkbox" value="2026-05" checked="" onclick="handleCbClick(event,&#39;cl-month-dd&#39;);renderCoaching()"> May 2026</label>
+            </div>
+          </div>
+        </div>
+        <div class="filter-group admin-only-filter" style="display:none;">
+          <label class="cv-label">Agent</label>
+          <div class="cb-dropdown" id="cl-agent-dd">
+            <div class="cb-trigger" onclick="toggleDD(&#39;cl-agent-dd&#39;)">
+              <span id="cl-agent-dd-label">All Agents</span>
+              <span class="cb-arrow">▾</span>
+            </div>
+            <div class="cb-menu">
+              <label class="cb-item"><input type="checkbox" value="Sharon Trejo" checked="" onclick="handleCbClick(event,&#39;cl-agent-dd&#39;);renderCoaching()"> Sharon Trejo</label>
+              <label class="cb-item"><input type="checkbox" value="Fredy Alberto Romero" checked="" onclick="handleCbClick(event,&#39;cl-agent-dd&#39;);renderCoaching()"> Fredy Alberto Romero</label>
+              <label class="cb-item"><input type="checkbox" value="Christian Tovar" checked="" onclick="handleCbClick(event,&#39;cl-agent-dd&#39;);renderCoaching()"> Christian Tovar</label>
+              <label class="cb-item"><input type="checkbox" value="Bianca Estrada" checked="" onclick="handleCbClick(event,&#39;cl-agent-dd&#39;);renderCoaching()"> Bianca Estrada</label>
+              <label class="cb-item"><input type="checkbox" value="Jesus Zarate" checked="" onclick="handleCbClick(event,&#39;cl-agent-dd&#39;);renderCoaching()"> Jesus Zarate</label>
+              <label class="cb-item"><input type="checkbox" value="Ana Leon" checked="" onclick="handleCbClick(event,&#39;cl-agent-dd&#39;);renderCoaching()"> Ana Leon</label>
+              <label class="cb-item"><input type="checkbox" value="Liliana Velasco Gantes" checked="" onclick="handleCbClick(event,&#39;cl-agent-dd&#39;);renderCoaching()"> Liliana Velasco Gantes</label>
+            </div>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label class="cv-label">Status</label>
+          <div class="cb-dropdown" id="cl-status-dd">
+            <div class="cb-trigger" onclick="toggleDD(&#39;cl-status-dd&#39;)">
+              <span id="cl-status-dd-label">All Statuses</span>
+              <span class="cb-arrow">▾</span>
+            </div>
+            <div class="cb-menu">
+              <label class="cb-item"><input type="checkbox" value="Open" checked="" onclick="handleCbClick(event,&#39;cl-status-dd&#39;);renderCoaching()"> 🔴 Open</label>
+              <label class="cb-item"><input type="checkbox" value="In Progress" checked="" onclick="handleCbClick(event,&#39;cl-status-dd&#39;);renderCoaching()"> 🟠 In Progress</label>
+              <label class="cb-item"><input type="checkbox" value="Resolved" checked="" onclick="handleCbClick(event,&#39;cl-status-dd&#39;);renderCoaching()"> 🟢 Resolved</label>
+            </div>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label class="cv-label">Rating</label>
+          <div class="cb-dropdown" id="cl-rating-dd">
+            <div class="cb-trigger" onclick="toggleDD(&#39;cl-rating-dd&#39;)">
+              <span id="cl-rating-dd-label">All Ratings</span>
+              <span class="cb-arrow">▾</span>
+            </div>
+            <div class="cb-menu">
+              <label class="cb-item"><input type="checkbox" value="Extremely satisfied" checked="" onclick="handleCbClick(event,&#39;cl-rating-dd&#39;);renderCoaching()"> Extremely Satisfied</label>
+              <label class="cb-item"><input type="checkbox" value="Mostly satisfied" checked="" onclick="handleCbClick(event,&#39;cl-rating-dd&#39;);renderCoaching()"> Mostly Satisfied</label>
+              <label class="cb-item"><input type="checkbox" value="Neither satisfied nor dissatisfied" checked="" onclick="handleCbClick(event,&#39;cl-rating-dd&#39;);renderCoaching()"> Neutral</label>
+              <label class="cb-item"><input type="checkbox" value="Mostly dissatisfied" checked="" onclick="handleCbClick(event,&#39;cl-rating-dd&#39;);renderCoaching()"> Mostly Dissatisfied</label>
+              <label class="cb-item"><input type="checkbox" value="Extremely dissatisfied" checked="" onclick="handleCbClick(event,&#39;cl-rating-dd&#39;);renderCoaching()"> Extremely Dissatisfied</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="coaching-entries" id="coaching-entries"></div>
     </div>
   </div>
@@ -581,6 +666,22 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);
               <label class="cb-item"><input type="checkbox" value="Neither satisfied nor dissatisfied" checked="" onclick="handleSumRating()"> Neutral</label>
               <label class="cb-item"><input type="checkbox" value="Mostly dissatisfied" checked="" onclick="handleSumRating()"> Mostly Dissatisfied</label>
               <label class="cb-item"><input type="checkbox" value="Extremely dissatisfied" checked="" onclick="handleSumRating()"> Extremely Dissatisfied</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- COACHING FILTER (Summary) -->
+        <div class="filter-group">
+          <label class="cv-label">Coaching</label>
+          <div class="cb-dropdown" id="sum-coaching-dd">
+            <div class="cb-trigger" onclick="toggleDD(&#39;sum-coaching-dd&#39;)">
+              <span id="sum-coaching-dd-label">All</span>
+              <span class="cb-arrow">▾</span>
+            </div>
+            <div class="cb-menu">
+              <label class="cb-item"><input type="radio" name="sum-coaching-filter" value="all" checked="" onclick="updateSumCoachingFilter(&#39;all&#39;)"> All Tickets</label>
+              <label class="cb-item"><input type="radio" name="sum-coaching-filter" value="yes" onclick="updateSumCoachingFilter(&#39;yes&#39;)"> ✅ Coached (Yes)</label>
+              <label class="cb-item"><input type="radio" name="sum-coaching-filter" value="no" onclick="updateSumCoachingFilter(&#39;no&#39;)"> ○ Not Coached (No)</label>
             </div>
           </div>
         </div>
@@ -790,6 +891,28 @@ function getAgentTickets() {
   return t;
 }
 
+// ── COACHING FILTER STATE ──
+let coachingFilterValue = 'all';
+let sumCoachingFilterValue = 'all';
+
+function updateCoachingFilter(val) {
+  coachingFilterValue = val;
+  const labels = {'all':'All','yes':'✅ Coached','no':'○ Not Coached'};
+  document.getElementById('coaching-filter-dd-label').textContent = labels[val];
+  renderTickets();
+}
+
+function updateSumCoachingFilter(val) {
+  sumCoachingFilterValue = val;
+  const labels = {'all':'All','yes':'✅ Coached','no':'○ Not Coached'};
+  document.getElementById('sum-coaching-dd-label').textContent = labels[val];
+  updateSummary();
+}
+
+function isTicketCoached(ticketId) {
+  return coachingLog.some(c => c.ticket === String(ticketId));
+}
+
 function getFilteredTickets() {
   let t = ALL_TICKETS.filter(x=>x.agent!=='Unassigned');
 
@@ -829,6 +952,13 @@ function getFilteredTickets() {
     } else if (ratingValues.length > 0) {
       t = t.filter(x=>ratingValues.includes(x.rating));
     }
+  }
+
+  // Coaching filter
+  if (coachingFilterValue === 'yes') {
+    t = t.filter(x => coachingLog.some(c => c.ticket === String(x.ticket_id)));
+  } else if (coachingFilterValue === 'no') {
+    t = t.filter(x => !coachingLog.some(c => c.ticket === String(x.ticket_id)));
   }
 
   return t;
@@ -953,7 +1083,45 @@ function filterTickets(f, btn) {
 // ── COACHING LOG ──
 function renderCoaching() {
   const container = document.getElementById('coaching-entries');
-  const entries = isAdmin ? coachingLog : coachingLog.filter(c=>c.agent===currentAgent);
+
+  // Apply coaching log filters
+  const clMonths = getCheckedValues('cl-month-dd');
+  const clAgents = getCheckedValues('cl-agent-dd');
+  const clStatuses = getCheckedValues('cl-status-dd');
+  const clRatings = getCheckedValues('cl-rating-dd');
+
+  let entries = isAdmin ? coachingLog : coachingLog.filter(c=>c.agent===currentAgent);
+
+  // Filter by month — match coaching date to month
+  if (clMonths.length > 0 && clMonths.length < 4) {
+    entries = entries.filter(e => {
+      const m = e.date ? e.date.substring(0,7) : '';
+      return clMonths.includes(m);
+    });
+  }
+
+  // Filter by agent (admin only)
+  if (isAdmin && clAgents.length > 0 && clAgents.length < 7) {
+    entries = entries.filter(e => clAgents.includes(e.agent));
+  }
+
+  // Filter by status
+  if (clStatuses.length > 0 && clStatuses.length < 3) {
+    entries = entries.filter(e => clStatuses.includes(e.status));
+  }
+
+  // Filter by rating — look up the ticket rating from ALL_TICKETS
+  if (clRatings.length > 0 && clRatings.length < 5) {
+    entries = entries.filter(e => {
+      const ticket = ALL_TICKETS.find(t => String(t.ticket_id) === String(e.ticket));
+      return ticket && clRatings.includes(ticket.rating);
+    });
+  }
+
+  updateFilterLabel('cl-month-dd','cl-month-dd-label','All Months');
+  updateFilterLabel('cl-agent-dd','cl-agent-dd-label','All Agents');
+  updateFilterLabel('cl-status-dd','cl-status-dd-label','All Statuses');
+  updateFilterLabel('cl-rating-dd','cl-rating-dd-label','All Ratings');
 
   if (!entries.length) {
     container.innerHTML=`<div class="empty-state"><div class="emoji">📋</div><h3>No coaching entries yet</h3><p>${isAdmin?'Click \"+ Add Entry\" to document your first coaching session.':'Your supervisor has not added any coaching entries yet.'}</p></div>`;
@@ -1161,6 +1329,8 @@ function getSumFiltered() {
     if(months.length > 0 && !months.includes(t.month)) return false;
     if(agents.length > 0 && !agents.includes(t.agent)) return false;
     if(ratings.length > 0 && !ratings.includes(t.rating)) return false;
+    if(sumCoachingFilterValue === 'yes' && !coachingLog.some(c=>c.ticket===String(t.ticket_id))) return false;
+    if(sumCoachingFilterValue === 'no' && coachingLog.some(c=>c.ticket===String(t.ticket_id))) return false;
     return true;
   });
 }
