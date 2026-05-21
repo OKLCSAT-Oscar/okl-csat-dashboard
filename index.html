@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0066)file:///C:/Users/Oscar%20Rojas/Downloads/csat-dashboard-v3_19.html -->
+<!-- saved from url=(0066)file:///C:/Users/Oscar%20Rojas/Downloads/csat-dashboard-v3_20.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1136,7 +1136,10 @@ function renderCoaching() {
 
   const statusClass = s => s==='Open'?'status-open':s==='In Progress'?'status-in-progress':'status-resolved';
 
-  container.innerHTML = entries.map((e,i) => `
+  container.innerHTML = entries.map((e,i) => {
+    // Find the REAL index in the full coachingLog array to pass to edit/delete
+    const realIdx = coachingLog.findIndex(c => c.ticket === e.ticket && c.agent === e.agent && c.date === e.date);
+    return `
     <div class="coaching-entry">
       <div class="coaching-entry-header">
         <div class="coaching-entry-meta">
@@ -1144,7 +1147,7 @@ function renderCoaching() {
           <div class="coaching-date">Coached: ${e.date}</div>
           <div class="coaching-status ${statusClass(e.status)}">${e.status}</div>
         </div>
-        ${isAdmin ? `<div class="admin-only-edit"><button class="edit-btn" onclick="editEntry(${i},event)">Edit</button><button class="delete-btn" onclick="deleteEntry(${i},event)">Delete</button></div>` : ''}
+        ${isAdmin ? `<div class="admin-only-edit"><button class="edit-btn" onclick="editEntry(${realIdx},event)">Edit</button><button class="delete-btn" onclick="deleteEntry(${realIdx},event)">Delete</button></div>` : ''}
       </div>
       <div class="coaching-entry-body">
         <div class="coaching-field"><label>Issue Identified</label><p>${e.issue||'—'}</p></div>
