@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0066)file:///C:/Users/Oscar%20Rojas/Downloads/csat-dashboard-v3_21.html -->
+<!-- saved from url=(0066)file:///C:/Users/Oscar%20Rojas/Downloads/csat-dashboard-v3_22.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -554,10 +554,33 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);
         </div>
       </div>
 
+        <div class="filter-group">
+          <label class="cv-label">Category</label>
+          <div class="cb-dropdown" id="cl-category-dd">
+            <div class="cb-trigger" onclick="toggleDD(&#39;cl-category-dd&#39;)">
+              <span id="cl-category-dd-label">All Categories</span>
+              <span class="cb-arrow">▾</span>
+            </div>
+            <div class="cb-menu" style="min-width:240px;">
+              <label class="cb-item"><input type="checkbox" value="Service" checked="" onclick="handleCbClick(event,&#39;cl-category-dd&#39;,renderCoaching)"> Service</label>
+              <label class="cb-item"><input type="checkbox" value="Policy" checked="" onclick="handleCbClick(event,&#39;cl-category-dd&#39;,renderCoaching)"> Policy</label>
+              <label class="cb-item"><input type="checkbox" value="Pricing" checked="" onclick="handleCbClick(event,&#39;cl-category-dd&#39;,renderCoaching)"> Pricing</label>
+              <label class="cb-item"><input type="checkbox" value="Product Complaint" checked="" onclick="handleCbClick(event,&#39;cl-category-dd&#39;,renderCoaching)"> Product Complaint</label>
+              <label class="cb-item"><input type="checkbox" value="Ticket Closed" checked="" onclick="handleCbClick(event,&#39;cl-category-dd&#39;,renderCoaching)"> Ticket Closed</label>
+              <label class="cb-item"><input type="checkbox" value="Shipping" checked="" onclick="handleCbClick(event,&#39;cl-category-dd&#39;,renderCoaching)"> Shipping</label>
+              <label class="cb-item"><input type="checkbox" value="OKL Delay" checked="" onclick="handleCbClick(event,&#39;cl-category-dd&#39;,renderCoaching)"> OKL Delay</label>
+              <label class="cb-item"><input type="checkbox" value="Service &amp; Product Complaint" checked="" onclick="handleCbClick(event,&#39;cl-category-dd&#39;,renderCoaching)"> Service &amp; Product Complaint</label>
+              <label class="cb-item"><input type="checkbox" value="Service &amp; Policy" checked="" onclick="handleCbClick(event,&#39;cl-category-dd&#39;,renderCoaching)"> Service &amp; Policy</label>
+              <label class="cb-item"><input type="checkbox" value="Undetermined" checked="" onclick="handleCbClick(event,&#39;cl-category-dd&#39;,renderCoaching)"> Undetermined</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="coaching-entries" id="coaching-entries"></div>
     </div>
   </div>
-</div>
+
 
 <!-- COACHING VIEW TAB -->
   <div id="coachingview-tab" style="display:none;">
@@ -712,6 +735,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);
           <div class="sum-chart-subtitle">Distribution by rating</div>
           <div id="chart-satisfaction" style="width:100%;height:260px;overflow:hidden;"></div>
         </div>
+
+        <!-- Chart 4: Reviews by Category -->
+        <div class="sum-chart-card sum-chart-wide">
+          <div class="sum-chart-title">Reviews by Category</div>
+          <div class="sum-chart-subtitle">Negative ticket volume broken down by issue category</div>
+          <div id="chart-category" style="width:100%;height:260px;overflow:hidden;"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -733,6 +763,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);
     <div class="modal-field"><label>Status</label><select id="m-status">
       <option value="Open">Open</option><option value="In Progress">In Progress</option><option value="Resolved">Resolved</option>
     </select></div>
+    <div class="modal-field"><label>Category (auto from ticket)</label><input type="text" id="m-category" placeholder="Auto-populated from ticket number" readonly="" style="background:#f5f5f5;color:#8C7B6B;"></div>
+    <div class="modal-field"><label>Recurrence</label><select id="m-recurrence">
+      <option value="Pending">Pending — Not yet reviewed</option>
+      <option value="No">No — Behavior not repeated</option>
+      <option value="Yes">Yes — Behavior repeated after coaching</option>
+    </select></div>
     <div class="modal-actions">
       <button class="modal-cancel" onclick="closeModal()">Cancel</button>
       <button class="modal-save" onclick="saveEntry()">Save Entry</button>
@@ -749,9 +785,11 @@ let isAdmin = false;
 let currentMonth = 'all';
 let currentFilter = 'all';
 // Force update coaching log if version doesn't match
-const COACHING_VERSION = 'okl_coaching_v2';
+const COACHING_VERSION = 'okl_coaching_v3';
 if (localStorage.getItem('okl_coaching_version') !== COACHING_VERSION) {
-  localStorage.setItem('okl_coaching_log', '[{"ticket": "17868", "agent": "Ana Leon", "date": "2026-05-14", "issue": "Agent sent a pre-built template without adapting it to the customer\'s specific situation. The customer had an active, unresolved cancellation request tied to a seven-month backorder, and the outgoing message referenced a satisfaction survey before the issue had been addressed.", "coached": "Templates are a starting point, not a final answer. Each response must be reviewed and personalized to reflect the customer\'s actual situation. In cases involving an escalation or a new ticket being opened, the communication should clearly state what is happening, why the current ticket is closing, and reference the new ticket number in multiple places throughout the message.", "commitment": "Agent commits to personalizing every template before sending, ensuring each response directly addresses the customer\'s scenario. The human touch in customer communication is what sets us apart \u2014 if responses are sent as-is without customization, that value is lost. Agent will make it a habit to review, adapt, and tailor all outgoing messages accordingly.", "followup": "2026-05-29", "status": "In Progress"}, {"ticket": "23517", "agent": "Christian Tovar", "date": "2026-05-19", "issue": "The customer reached out requesting product information and was directed to the design team via a link. While the agent\'s intent was to connect the customer with the right resource, the response lacked personalization and did not directly address the customer\'s concern. The customer left a negative review citing the quality of the service received.", "coached": "Templates are a guide, not the source of truth. When directing a customer to a different team or resource, the response must still feel personal and relevant to their specific request. The agent should acknowledge the customer\'s concern before redirecting, explain why the design team is the best resource, and set a clear expectation for next steps rather than leaving the customer to navigate on their own.", "commitment": "We are asking the agent to commit to personalizing all outgoing communications, ensuring that each response speaks directly to the customer\'s concern before offering a redirect or solution. Agent will not rely solely on template language and will always add a personal touch that reflects an understanding of the customer\'s situation.", "followup": "2026-05-31", "status": "In Progress"}, {"ticket": "24250", "agent": "Christian Tovar", "date": "2026-05-19", "issue": "The agent handled the cancellation process appropriately and followed up with the customer regarding a potential replacement. However, the customer also raised a concern about a promotional price they were expecting, which was not acknowledged or addressed in the response. Missing a secondary concern within the same interaction led to an incomplete resolution and contributed to the negative review.", "coached": "When a customer raises more than one concern within the same message, it is important to address each point before closing the interaction. Focusing only on the primary issue while overlooking secondary concerns can leave the customer feeling unheard and result in follow-up contacts or negative feedback. The agent should read each message carefully and confirm that all points have been acknowledged before sending a response.", "commitment": "We are asking the agent to commit to reading each customer message in full before drafting a response, ensuring that all concerns raised are acknowledged and addressed. The agent will build the habit of reviewing responses before sending to confirm that nothing has been left unanswered.", "followup": "2026-05-31", "status": "In Progress"}, {"ticket": "21775", "agent": "Sharon Trejo", "date": "2026-05-19", "issue": "The customer reported that their adjustable floor lamp arrived with the top portion unattached. Upon reviewing the photos provided by the customer, the damage appeared to be a shipping-related issue rather than a vendor defect. The ticket was initially handled without a thorough review of the images, and the resolution path taken did not align with the nature of the damage reported.", "coached": "When a customer submits photos as part of a damage or defect report, it is important to take the time to review those images carefully before determining a resolution path. Consulting internally when there is uncertainty about whether damage should be classified as a carrier claim or a vendor defect is essential. The appropriate team member should be tagged for a quick assessment when needed.", "commitment": "Agent commits to thoroughly reviewing customer-submitted photos before determining a resolution path, and to consulting internally when there is uncertainty about damage classification. Agent will build the habit of tagging the appropriate team member for assessment when needed. Agent also commits to personalizing all outgoing templates to reflect the customer\'s specific scenario.", "followup": "2026-05-31", "status": "In Progress"}, {"ticket": "25497", "agent": "Sharon Trejo", "date": "2026-05-19", "issue": "The customer reached out regarding the status of a pending refund of $374.75, of which only $357.71 had been processed. The remaining $17.04 had not yet been issued. The ticket was handled as a price adjustment rather than a refund status follow-up, which led to a miscommunication and the customer not receiving a clear explanation of the discrepancy.", "coached": "It is important to distinguish between a price adjustment ticket and a refund status ticket, as they require different handling procedures. Refund status tickets must be kept open until full resolution has been confirmed, and the customer must be provided with a clear and personalized explanation of any discrepancies in the refund amount.", "commitment": "Agent commits to keeping refund status tickets open until full resolution has been confirmed, and to providing the customer with a clear and personalized explanation of any discrepancies. Agent will maintain proactive follow-up throughout the process rather than closing the ticket upon initial outreach.", "followup": "2026-05-31", "status": "In Progress"}]');
+  localStorage.setItem('okl_coaching_log', '[{"ticket": "17868", "agent": "Ana Leon", "date": "2026-05-14", "issue": "Agent sent a pre-built template without adapting it to the customer\'s specific situation. The customer had an active, unresolved cancellation request tied to a seven-month backorder, and the outgoing message referenced a satisfaction survey before the issue had been addressed.", "coached": "Templates are a starting point, not a final answer. Each response must be reviewed and personalized to reflect the customer\'s actual situation. In cases involving an escalation or a new ticket being opened, the communication should clearly state what is happening, why the current ticket is closing, and reference the new ticket number in multiple places throughout the message.", "commitment": "Agent commits to personalizing every template before sending, ensuring each response directly addresses the customer\'s scenario. The human touch in customer communication is what sets us apart \u2014 if responses are sent as-is without customization, that value is lost. Agent will make it a habit to review, adapt, and tailor all outgoing messages accordingly.", "followup": "2026-05-29", "status": "In Progress", "category": "OKL Delay", "recurrence": "Pending"}, {"ticket": "23517", "agent": "Christian Tovar", "date": "2026-05-19", "issue": "The customer reached out requesting product information and was directed to the design team via a link. While the agent\'s intent was to connect the customer with the right resource, the response lacked personalization and did not directly address the customer\'s concern. The customer left a negative review citing the quality of the service received.", "coached": "Templates are a guide, not the source of truth. When directing a customer to a different team or resource, the response must still feel personal and relevant to their specific request. The agent should acknowledge the customer\'s concern before redirecting, explain why the design team is the best resource, and set a clear expectation for next steps rather than leaving the customer to navigate on their own.", "commitment": "We are asking the agent to commit to personalizing all outgoing communications, ensuring that each response speaks directly to the customer\'s concern before offering a redirect or solution. Agent will not rely solely on template language and will always add a personal touch that reflects an understanding of the customer\'s situation.", "followup": "2026-05-31", "status": "In Progress", "category": "Service", "recurrence": "Pending"}, {"ticket": "24250", "agent": "Christian Tovar", "date": "2026-05-19", "issue": "The agent handled the cancellation process appropriately and followed up with the customer regarding a potential replacement. However, the customer also raised a concern about a promotional price they were expecting, which was not acknowledged or addressed in the response. Missing a secondary concern within the same interaction led to an incomplete resolution and contributed to the negative review.", "coached": "When a customer raises more than one concern within the same message, it is important to address each point before closing the interaction. Focusing only on the primary issue while overlooking secondary concerns can leave the customer feeling unheard and result in follow-up contacts or negative feedback. The agent should read each message carefully and confirm that all points have been acknowledged before sending a response.", "commitment": "We are asking the agent to commit to reading each customer message in full before drafting a response, ensuring that all concerns raised are acknowledged and addressed. The agent will build the habit of reviewing responses before sending to confirm that nothing has been left unanswered.", "followup": "2026-05-31", "status": "In Progress", "category": "Service", "recurrence": "Pending"}, {"ticket": "21775", "agent": "Sharon Trejo", "date": "2026-05-19", "issue": "The customer reported that their adjustable floor lamp arrived with the top portion unattached. Upon reviewing the photos provided by the customer, the damage appeared to be a shipping-related issue rather than a vendor defect. The ticket was initially handled without a thorough review of the images, and the resolution path taken did not align with the nature of the damage reported.", "coached": "When a customer submits photos as part of a damage or defect report, it is important to take the time to review those images carefully before determining a resolution path. Consulting internally when there is uncertainty about whether damage should be classified as a carrier claim or a vendor defect is essential. The appropriate team member should be tagged for a quick assessment when needed.", "commitment": "Agent commits to thoroughly reviewing customer-submitted photos before determining a resolution path, and to consulting internally when there is uncertainty about damage classification. Agent will build the habit of tagging the appropriate team member for assessment when needed. Agent also commits to personalizing all outgoing templates to reflect the customer\'s specific scenario.", "followup": "2026-05-31", "status": "In Progress", "category": "Shipping", "recurrence": "Pending"}, {"ticket": "25497", "agent": "Sharon Trejo", "date": "2026-05-19", "issue": "The customer reached out regarding the status of a pending refund of $374.75, of which only $357.71 had been processed. The remaining $17.04 had not yet been issued. The ticket was handled as a price adjustment rather than a refund status follow-up, which led to a miscommunication and the customer not receiving a clear explanation of the discrepancy.", "coached": "It is important to distinguish between a price adjustment ticket and a refund status ticket, as they require different handling procedures. Refund status tickets must be kept open until full resolution has been confirmed, and the customer must be provided with a clear and personalized explanation of any discrepancies in the refund amount.", "commitment": "Agent commits to keeping refund status tickets open until full resolution has been confirmed, and to providing the customer with a clear and personalized explanation of any discrepancies. Agent will maintain proactive follow-up throughout the process rather than closing the ticket upon initial outreach.", "followup": "2026-05-31", "status": "In Progress", "category": "OKL Delay", "recurrence": "Pending"}]');
+  localStorage.setItem('okl_coaching_version', COACHING_VERSION);
+}
   localStorage.setItem('okl_coaching_version', COACHING_VERSION);
 }
 let coachingLog = JSON.parse(localStorage.getItem('okl_coaching_log') || '[{"ticket": "17868", "agent": "Ana Leon", "date": "2026-05-14", "issue": "Agent sent a pre-built template without adapting it to the customer\'s specific situation. The customer had an active, unresolved cancellation request tied to a seven-month backorder, and the outgoing message referenced a satisfaction survey before the issue had been addressed.", "coached": "Templates are a starting point, not a final answer. Each response must be reviewed and personalized to reflect the customer\'s actual situation. In cases involving an escalation or a new ticket being opened, the communication should clearly state what is happening, why the current ticket is closing, and reference the new ticket number in multiple places throughout the message.", "commitment": "Agent commits to personalizing every template before sending, ensuring each response directly addresses the customer\'s scenario. The human touch in customer communication is what sets us apart \u2014 if responses are sent as-is without customization, that value is lost. Agent will make it a habit to review, adapt, and tailor all outgoing messages accordingly.", "followup": "2026-05-29", "status": "In Progress"}, {"ticket": "23517", "agent": "Christian Tovar", "date": "2026-05-19", "issue": "The customer reached out requesting product information and was directed to the design team via a link. While the agent\'s intent was to connect the customer with the right resource, the response lacked personalization and did not directly address the customer\'s concern. The customer left a negative review citing the quality of the service received.", "coached": "Templates are a guide, not the source of truth. When directing a customer to a different team or resource, the response must still feel personal and relevant to their specific request. The agent should acknowledge the customer\'s concern before redirecting, explain why the design team is the best resource, and set a clear expectation for next steps rather than leaving the customer to navigate on their own.", "commitment": "We are asking the agent to commit to personalizing all outgoing communications, ensuring that each response speaks directly to the customer\'s concern before offering a redirect or solution. Agent will not rely solely on template language and will always add a personal touch that reflects an understanding of the customer\'s situation.", "followup": "2026-05-31", "status": "In Progress"}, {"ticket": "24250", "agent": "Christian Tovar", "date": "2026-05-19", "issue": "The agent handled the cancellation process appropriately and followed up with the customer regarding a potential replacement. However, the customer also raised a concern about a promotional price they were expecting, which was not acknowledged or addressed in the response. Missing a secondary concern within the same interaction led to an incomplete resolution and contributed to the negative review.", "coached": "When a customer raises more than one concern within the same message, it is important to address each point before closing the interaction. Focusing only on the primary issue while overlooking secondary concerns can leave the customer feeling unheard and result in follow-up contacts or negative feedback. The agent should read each message carefully and confirm that all points have been acknowledged before sending a response.", "commitment": "We are asking the agent to commit to reading each customer message in full before drafting a response, ensuring that all concerns raised are acknowledged and addressed. The agent will build the habit of reviewing responses before sending to confirm that nothing has been left unanswered.", "followup": "2026-05-31", "status": "In Progress"}, {"ticket": "21775", "agent": "Sharon Trejo", "date": "2026-05-19", "issue": "The customer reported that their adjustable floor lamp arrived with the top portion unattached. Upon reviewing the photos provided by the customer, the damage appeared to be a shipping-related issue rather than a vendor defect. The ticket was initially handled without a thorough review of the images, and the resolution path taken did not align with the nature of the damage reported.", "coached": "When a customer submits photos as part of a damage or defect report, it is important to take the time to review those images carefully before determining a resolution path. Consulting internally when there is uncertainty about whether damage should be classified as a carrier claim or a vendor defect is essential. The appropriate team member should be tagged for a quick assessment when needed.", "commitment": "Agent commits to thoroughly reviewing customer-submitted photos before determining a resolution path, and to consulting internally when there is uncertainty about damage classification. Agent will build the habit of tagging the appropriate team member for assessment when needed. Agent also commits to personalizing all outgoing templates to reflect the customer\'s specific scenario.", "followup": "2026-05-31", "status": "In Progress"}, {"ticket": "25497", "agent": "Sharon Trejo", "date": "2026-05-19", "issue": "The customer reached out regarding the status of a pending refund of $374.75, of which only $357.71 had been processed. The remaining $17.04 had not yet been issued. The ticket was handled as a price adjustment rather than a refund status follow-up, which led to a miscommunication and the customer not receiving a clear explanation of the discrepancy.", "coached": "It is important to distinguish between a price adjustment ticket and a refund status ticket, as they require different handling procedures. Refund status tickets must be kept open until full resolution has been confirmed, and the customer must be provided with a clear and personalized explanation of any discrepancies in the refund amount.", "commitment": "Agent commits to keeping refund status tickets open until full resolution has been confirmed, and to providing the customer with a clear and personalized explanation of any discrepancies. Agent will maintain proactive follow-up throughout the process rather than closing the ticket upon initial outreach.", "followup": "2026-05-31", "status": "In Progress"}]');
@@ -1124,10 +1162,20 @@ function renderCoaching() {
     });
   }
 
+  // Filter by category
+  const clCategories = getCheckedValues('cl-category-dd');
+  if (clCategories.length > 0 && clCategories.length < 10) {
+    entries = entries.filter(e => {
+      const cat = e.category || (ALL_TICKETS.find(t=>String(t.ticket_id)===String(e.ticket))||{}).category || '';
+      return clCategories.includes(cat);
+    });
+  }
+
   updateFilterLabel('cl-month-dd','cl-month-dd-label','All Months');
   updateFilterLabel('cl-agent-dd','cl-agent-dd-label','All Agents');
   updateFilterLabel('cl-status-dd','cl-status-dd-label','All Statuses');
   updateFilterLabel('cl-rating-dd','cl-rating-dd-label','All Ratings');
+  updateFilterLabel('cl-category-dd','cl-category-dd-label','All Categories');
 
   if (!entries.length) {
     container.innerHTML=`<div class="empty-state"><div class="emoji">📋</div><h3>No coaching entries yet</h3><p>${isAdmin?'Click \"+ Add Entry\" to document your first coaching session.':'Your supervisor has not added any coaching entries yet.'}</p></div>`;
@@ -1156,7 +1204,11 @@ function renderCoaching() {
         <div class="coaching-field"><label>Follow-Up Date</label><p>${e.followup||'—'}</p></div>
       </div>
       <div class="coaching-entry-footer">
-        <div class="follow-up-date">Follow-up: ${e.followup||'Not set'}</div>
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <div class="follow-up-date">Follow-up: ${e.followup||'Not set'}</div>
+          ${(()=>{const t=ALL_TICKETS.find(x=>String(x.ticket_id)===String(e.ticket));const cat=e.category||(t?t.category:'');return cat?`<div style="font-size:11px;background:var(--cream);border:1px solid var(--border);padding:3px 10px;border-radius:20px;color:var(--stone);font-weight:600;">📂 ${cat}</div>`:''})()}
+          ${(()=>{const r=e.recurrence||'Pending';const styles={'Pending':'background:#FEF9E7;color:#E67E22;','No':'background:#E8F8EE;color:#27AE60;','Yes':'background:#FDECEA;color:#C0392B;'};return `<div style="font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600;${styles[r]||styles['Pending']}">🔁 Recurrence: ${r}</div>`;})()}
+        </div>
       </div>
     </div>`;
   }).join('');
@@ -1175,6 +1227,10 @@ function openModal(idx=-1) {
     document.getElementById('m-commitment').value=e.commitment||'';
     document.getElementById('m-followup').value=e.followup||'';
     document.getElementById('m-status').value=e.status||'Open';
+    document.getElementById('m-recurrence').value=e.recurrence||'Pending';
+    // Auto-populate category from ticket
+    const t=ALL_TICKETS.find(x=>String(x.ticket_id)===String(e.ticket));
+    document.getElementById('m-category').value=t?t.category:'';
   } else {
     document.getElementById('m-ticket').value='';
     document.getElementById('m-date').value=new Date().toISOString().split('T')[0];
@@ -1183,22 +1239,33 @@ function openModal(idx=-1) {
     document.getElementById('m-commitment').value='';
     document.getElementById('m-followup').value='';
     document.getElementById('m-status').value='Open';
+    document.getElementById('m-recurrence').value='Pending';
+    document.getElementById('m-category').value='';
   }
+  // Auto-populate category when ticket number changes
+  document.getElementById('m-ticket').oninput = function() {
+    const t=ALL_TICKETS.find(x=>String(x.ticket_id)===String(this.value));
+    document.getElementById('m-category').value=t?t.category:'';
+  };
   document.getElementById('modal-overlay').classList.add('open');
 }
 
 function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
 
 function saveEntry() {
+  const ticketVal = document.getElementById('m-ticket').value.trim();
+  const ticketData = ALL_TICKETS.find(x=>String(x.ticket_id)===String(ticketVal));
   const entry = {
-    ticket: document.getElementById('m-ticket').value.trim(),
+    ticket: ticketVal,
     agent: document.getElementById('m-agent').value,
     date: document.getElementById('m-date').value,
     issue: document.getElementById('m-issue').value.trim(),
     coached: document.getElementById('m-coached').value.trim(),
     commitment: document.getElementById('m-commitment').value.trim(),
     followup: document.getElementById('m-followup').value,
-    status: document.getElementById('m-status').value
+    status: document.getElementById('m-status').value,
+    category: ticketData ? ticketData.category : document.getElementById('m-category').value,
+    recurrence: document.getElementById('m-recurrence').value
   };
   if(editingIndex>=0) coachingLog[editingIndex]=entry;
   else coachingLog.unshift(entry);
@@ -1376,6 +1443,7 @@ function _doUpdateSummary() {
   renderAgentChart(data);
   renderTimeChart(data);
   renderSatChart(data);
+  renderCategoryChart(data);
 }
 
 
@@ -1501,6 +1569,59 @@ function renderTimeChart(data) {
     [{label:'Positive',data:posD,color:'#27AE60'},{label:'Neutral',data:neuD,color:'#2980B9'},{label:'Negative',data:negD,color:'#C0392B'}],
     labels,{height:260}
   );
+}
+
+function renderCategoryChart(data) {
+  const container = document.getElementById('chart-category');
+  if (!container) return;
+  // Only negative tickets for category chart
+  const negData = data.filter(t=>t.rating==='Extremely dissatisfied'||t.rating==='Mostly dissatisfied');
+  const categories = ['Service','OKL Delay','Product Complaint','Policy','Ticket Closed',
+                      'Pricing','Shipping','Service & Product Complaint','Service & Policy','Undetermined'];
+  const counts = categories.map(c=>negData.filter(t=>t.category===c).length);
+  // Filter out zero categories
+  const filtered = categories.map((c,i)=>({label:c,count:counts[i]})).filter(x=>x.count>0);
+  filtered.sort((a,b)=>b.count-a.count);
+  const catColors = {
+    'Service':'#C0392B','OKL Delay':'#E67E22','Product Complaint':'#8E44AD',
+    'Policy':'#2980B9','Ticket Closed':'#E74C3C','Pricing':'#F39C12',
+    'Shipping':'#16A085','Service & Product Complaint':'#C0392B',
+    'Service & Policy':'#2C3E50','Undetermined':'#95A5A6'
+  };
+  const W=container.offsetWidth||800, H=280;
+  const PAD={top:20,right:20,bottom:60,left:40};
+  const chartW=W-PAD.left-PAD.right, chartH=H-PAD.top-PAD.bottom;
+  const maxVal=Math.max(...filtered.map(x=>x.count),1);
+  const barW=Math.min(55,chartW/filtered.length*0.65);
+  const gap=chartW/filtered.length;
+  let svg=`<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg" font-family="DM Sans,sans-serif">`;
+  // Grid
+  [0,0.25,0.5,0.75,1].forEach(t=>{
+    const y=PAD.top+chartH*(1-t);
+    const val=Math.round(maxVal*t);
+    svg+=`<line x1="${PAD.left}" y1="${y}" x2="${PAD.left+chartW}" y2="${y}" stroke="#E8E0D5" stroke-width="1"/>`;
+    svg+=`<text x="${PAD.left-6}" y="${y+4}" text-anchor="end" font-size="10" fill="#8C7B6B">${val}</text>`;
+  });
+  filtered.forEach((item,i)=>{
+    const cx=PAD.left+i*gap+gap/2;
+    const bh=item.count/maxVal*chartH;
+    const by=PAD.top+chartH-bh;
+    const color=catColors[item.label]||'#95A5A6';
+    svg+=`<rect x="${cx-barW/2}" y="${by}" width="${barW}" height="${bh}" fill="${color}" rx="3" opacity="0.85"/>`;
+    svg+=`<text x="${cx}" y="${by-5}" text-anchor="middle" font-size="11" font-weight="600" fill="${color}">${item.count}</text>`;
+    // Label - split long names
+    const words=item.label.split(' ');
+    if(words.length<=2) {
+      svg+=`<text x="${cx}" y="${PAD.top+chartH+16}" text-anchor="middle" font-size="10" fill="#1A1612">${item.label}</text>`;
+    } else {
+      const mid=Math.ceil(words.length/2);
+      svg+=`<text x="${cx}" y="${PAD.top+chartH+14}" text-anchor="middle" font-size="9" fill="#1A1612">${words.slice(0,mid).join(' ')}</text>`;
+      svg+=`<text x="${cx}" y="${PAD.top+chartH+25}" text-anchor="middle" font-size="9" fill="#1A1612">${words.slice(mid).join(' ')}</text>`;
+    }
+  });
+  svg+=`<line x1="${PAD.left}" y1="${PAD.top}" x2="${PAD.left}" y2="${PAD.top+chartH}" stroke="#E8E0D5" stroke-width="1"/>`;
+  svg+='</svg>';
+  container.innerHTML=svg;
 }
 
 function renderSatChart(data) {
